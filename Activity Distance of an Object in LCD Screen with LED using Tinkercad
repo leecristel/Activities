@@ -1,0 +1,69 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd = LiquidCrystal(2, 3, 4, 5, 6, 7); // Create an LCD object. Parameters: (RS, E, D4, D5, D6, D7):
+int trigPin = 12;
+int echoPin = 11;
+int red = 10;                        
+int yellow = 9;
+int green = 8;    
+int buzzer = 13;
+
+float time, distance;
+void setup() 
+{
+    lcd.begin(16, 2); 
+    pinMode(trigPin, OUTPUT);  
+	pinMode(echoPin, INPUT);
+	pinMode(red, OUTPUT);
+  	pinMode(yellow, OUTPUT);
+  	pinMode(green, OUTPUT);
+  	pinMode(buzzer, OUTPUT);
+
+	Serial.begin(9600);
+  
+}
+
+void loop() 
+{
+digitalWrite(trigPin, LOW);  
+delayMicroseconds(2);  
+digitalWrite(trigPin, HIGH);  
+delayMicroseconds(10);  
+digitalWrite(trigPin, LOW);  
+
+time = pulseIn(echoPin, HIGH);
+
+distance = (time*.0343)/2;  
+  
+  if (distance < 10) {
+      digitalWrite(red, HIGH);
+      digitalWrite(buzzer, HIGH);
+} 
+  else {
+    digitalWrite(red, LOW);
+}
+  if (distance > 10 && distance < 20) {
+      digitalWrite(yellow, HIGH);
+   	  digitalWrite(buzzer, LOW);
+}
+  else {
+      digitalWrite(yellow, LOW);
+}
+  if (distance > 20) {
+    digitalWrite(green, HIGH);
+    digitalWrite(buzzer, LOW);
+}
+  else {
+    digitalWrite(green,LOW);
+}
+
+// For Serial Monitor
+Serial.print("Distance:CM ");  
+Serial.println(distance);  
+
+ // For LCD Display
+lcd.setCursor(0,0);
+lcd.print("Distance in CM");
+lcd.setCursor(0,1);
+lcd.print(distance);
+
+}
