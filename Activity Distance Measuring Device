@@ -1,0 +1,65 @@
+int trigPin = 3;
+int echoPin = 2;
+int green = 10;                            
+int yellow = 9;
+int red = 8;
+int buzzer = 6;
+                                                                                                               
+int sound = 250;
+
+
+void setup() {
+  Serial.begin (9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(green, OUTPUT);
+  pinMode(yellow, OUTPUT);
+  pinMode(red, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+
+}
+
+void loop() {
+  long duration, distance;
+  digitalWrite(trigPin, LOW); 
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration/2) / 29.1;
+
+
+  if (distance > 20) {
+    digitalWrite(green, HIGH);
+}
+  else {
+    digitalWrite(green,LOW);
+  }
+  if (distance > 10 && distance < 20) {
+      digitalWrite(yellow, HIGH);
+   	  digitalWrite(buzzer, LOW);
+}
+  else {
+      digitalWrite(yellow, LOW);
+  }
+  if (distance < 10) {
+      digitalWrite(red, HIGH);
+      digitalWrite(buzzer, LOW);
+} 
+  else {
+    digitalWrite(red, LOW);
+  }
+  
+  if (distance > 30 || distance <= 0){
+    Serial.println("Out of range");
+    noTone(buzzer);
+  }
+  else {
+    Serial.print(distance);
+    Serial.println(" cm");
+    tone(buzzer, sound);
+
+  }
+  delay(500);
+}
