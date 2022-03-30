@@ -1,0 +1,62 @@
+int sensorPin = 0;
+int reading;
+int red = 7;
+int green = 6;
+int yellow = 5;    
+int buzzer = 4;
+const int Motor_pin = 3;
+float voltage,temperatureC,temperatureF;
+
+void setup()
+{
+ Serial.begin(9600);
+ pinMode(Motor_pin, OUTPUT);
+ pinMode(red, OUTPUT);
+ pinMode(green, OUTPUT);
+ pinMode(yellow, OUTPUT);
+ pinMode(buzzer, OUTPUT);
+}
+
+void loop(){
+ reading = analogRead(sensorPin);
+ voltage = reading * 5.0;
+ voltage /= 1024.0;
+ temperatureC = (voltage - 0.5) * 100 ;
+ temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+  
+{  
+      if (temperatureC > 37) {
+      digitalWrite(red, HIGH);
+      digitalWrite(buzzer, HIGH);
+      analogWrite(Motor_pin,255);
+	} 
+      else {
+        digitalWrite(red, LOW);
+    }
+  
+      if (temperatureC > 27 && temperatureC < 37) {
+          digitalWrite(green, HIGH);
+          digitalWrite(buzzer, LOW);
+          analogWrite(Motor_pin,140);
+    }
+      else {
+          digitalWrite(green, LOW);
+    }
+  
+      if (temperatureC < 27) {
+        digitalWrite(yellow, HIGH);
+        digitalWrite(buzzer, HIGH);
+        analogWrite(Motor_pin,0);
+    }
+      else {
+        digitalWrite(yellow,LOW);
+    }
+      }
+  
+  	Serial.println("The Temperature is: ");
+ 	Serial.print(temperatureC); 
+  	Serial.println(" degrees C");
+ 	Serial.print(temperatureF); 
+  	Serial.println(" degrees F");
+ 	delay(1000);
+}
